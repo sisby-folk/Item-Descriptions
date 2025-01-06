@@ -14,7 +14,7 @@ import static cc.cassian.item_descriptions.client.helpers.ModHelpers.*;
 
 public class GenericKeys {
     public static @NotNull String getGenericLoreKey(String loreKey) {
-        if (!ModConfig.get().developer_disableGenericStringDescriptions) {
+        if (!ModConfig.INSTANCE.developer_disableGenericStringDescriptions) {
             //Iterate through the provided generic keys.
             if (loreKey.contains("planks")) return "lore.generic.planks";
             else if (loreKey.contains("_sword")) return "lore.generic.sword";
@@ -152,7 +152,7 @@ public class GenericKeys {
 
     public static String getGenericKey(Object object) {
         String loreKey = getLoreTranslationKey(object);
-        if (!ModConfig.get().developer_disableGenericTagDescriptions) {
+        if (!ModConfig.INSTANCE.developer_disableGenericTagDescriptions) {
             //Iterate through the provided generic tag list.
             String generic = checkGenericTagList(object);
             if (generic != null) {

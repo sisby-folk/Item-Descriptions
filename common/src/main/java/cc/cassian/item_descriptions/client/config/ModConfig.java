@@ -51,10 +51,6 @@ public class ModConfig extends WrappedConfig {
     @Comment("Whether to disable using tags to provide generic item descriptions.")
     public boolean developer_disableGenericTagDescriptions = false;
 
-    public static ModConfig get() {
-        return INSTANCE;
-    }
-
     @ExpectPlatform
     static Path configPath() {
         throw new AssertionError();

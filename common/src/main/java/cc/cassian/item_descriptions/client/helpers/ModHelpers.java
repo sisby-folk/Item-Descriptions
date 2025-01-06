@@ -31,9 +31,6 @@ import static cc.cassian.item_descriptions.client.ModClient.MOD_ID;
 import static cc.cassian.item_descriptions.client.helpers.GenericKeys.*;
 
 public class ModHelpers {
-    //Shorthand for config.
-    public static ModConfig config = ModConfig.get();
-
     //Check if ToolTipFix is installed and its wrapper should be used.
     @ExpectPlatform
     public static boolean tooltipFixInstalled() {
@@ -42,12 +39,12 @@ public class ModHelpers {
 
     //Used in Config to change the tooltip's formatting.
     public static Style getStyle() {
-        return Style.EMPTY.withColor(getColour()).withItalic(config.style_italics).withBold(config.style_bold);
+        return Style.EMPTY.withColor(getColour()).withItalic(ModConfig.INSTANCE.style_italics).withBold(ModConfig.INSTANCE.style_bold);
     }
 
     //Used to check what colour a tooltip should be.
     public static TextColor getColour() {
-        String colour = config.style_color;
+        String colour = ModConfig.INSTANCE.style_color;
         int length = colour.length();
         if (length == 1) {
             return TextColor.fromFormatting(Formatting.byCode(colour.charAt(0)));
@@ -85,16 +82,20 @@ public class ModHelpers {
 
     //Check if a keybind is pressed and a tooltip should be displayed.
     public static boolean tooltipKeyPressed() {
-        if (config.keybind_displayWhenControlIsHeld && Screen.hasControlDown()) return checkKey(Screen.hasControlDown());
-        else if (config.keybind_displayWhenShiftIsHeld && Screen.hasShiftDown()) return checkKey(Screen.hasShiftDown());
-        else if (config.keybind_displayWhenAltIsHeld && Screen.hasAltDown()) return checkKey(Screen.hasAltDown());
-        else return false;
+        if (ModConfig.INSTANCE.keybind_displayWhenControlIsHeld && Screen.hasControlDown()) return checkKey(Screen.hasControlDown());
+        else {
+            if (ModConfig.INSTANCE.keybind_displayWhenShiftIsHeld && Screen.hasShiftDown()) return checkKey(Screen.hasShiftDown());
+            else {
+                if (ModConfig.INSTANCE.keybind_displayWhenAltIsHeld && Screen.hasAltDown()) return checkKey(Screen.hasAltDown());
+                else return false;
+            }
+        }
     }
 
     //Check if a keybind is pressed. Contains the handling for if the key is inverted.
     @SuppressWarnings({"DuplicateCondition", "ConstantValue"})
     public static boolean checkKey(boolean key) {
-        boolean invert = config.keybind_invert;
+        boolean invert = ModConfig.INSTANCE.keybind_invert;
         //If key is pressed, display the tooltip unless inverted.
         if (key) return !invert;
         //If key is not pressed, don't display the tooltip unless inverted.
@@ -170,16 +171,22 @@ public class ModHelpers {
 
     //Check if block descriptions should be shown based off configuration.
     public static boolean showBlockDescriptions() {
-        return config.blockDescriptions && (tooltipKeyPressed() || config.displayBlockDescriptionsAlways);
+        if (!ModConfig.INSTANCE.blockDescriptions) return false;
+        if (tooltipKeyPressed()) return true;
+        return ModConfig.INSTANCE.displayBlockDescriptionsAlways;
     }
 
     //Check if item descriptions should be shown based off configuration.
     public static boolean showItemDescriptions() {
-        return config.itemDescriptions && (tooltipKeyPressed() || config.displayAlways);
+        if (!ModConfig.INSTANCE.itemDescriptions) return false;
+        if (tooltipKeyPressed()) return true;
+        return ModConfig.INSTANCE.displayAlways;
     }
     //Check if entity descriptions should be shown based off configuration.
     public static boolean showEntityDescriptions() {
-        return config.entityDescriptions && (tooltipKeyPressed() || config.displayEntityDescriptionsAlways);
+        if (!ModConfig.INSTANCE.entityDescriptions) return false;
+        if (tooltipKeyPressed()) return true;
+        return ModConfig.INSTANCE.displayEntityDescriptionsAlways;
     }
 
     //Shorthand to check a block's lore key.
@@ -195,7 +202,7 @@ public class ModHelpers {
     //Check if a lore key exists or if a generic tooltip should be used.
     public static String checkLoreKey(String loreKey) {
         //This function handles whether a generic tooltip should be used, or if a tooltip exists.
-        if (!config.developer_dontTranslate) {
+        if (!ModConfig.INSTANCE.developer_dontTranslate) {
             //Check if the tooltip translation key exists. If so, use the provided tooltip.
             if (hasTranslation(loreKey)) return loreKey;
             //If the tooltip translation key does not exist, use one of the provided generic tooltips.
@@ -290,13 +297,13 @@ public class ModHelpers {
 
     // Translate key with I18n. Can be disabled with developer options.
     public static String translate(String key) {
-        if (!config.developer_dontTranslate) return I18n.translate(key);
+        if (!ModConfig.INSTANCE.developer_dontTranslate) return I18n.translate(key);
         else return key;
     }
 
     // Check for translation with I18n. Can be disabled with developer options.
     public static boolean hasTranslation(String key) {
-        if (!config.developer_showUntranslated) return I18n.hasTranslation(key);
+        if (!ModConfig.INSTANCE.developer_showUntranslated) return I18n.hasTranslation(key);
         else return true;
     }
 
@@ -304,7 +311,7 @@ public class ModHelpers {
     public static List<Text> createTooltip(String loreKey, boolean wrap) {
         //Setup list to store (potentially multi-line) tooltip.
         ArrayList<Text> lines = new ArrayList<>();
-        int maxLength = config.style_length;
+        int maxLength = ModConfig.INSTANCE.style_length;
         //Check if the key exists.
         if (!loreKey.isEmpty()) {
             //Translate the lore key.
