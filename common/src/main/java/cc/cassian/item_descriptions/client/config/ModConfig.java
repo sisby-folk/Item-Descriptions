@@ -1,6 +1,5 @@
 package cc.cassian.item_descriptions.client.config;
 
-import cc.cassian.item_descriptions.client.ModClient;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import folk.sisby.kaleido.api.WrappedConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
@@ -8,8 +7,6 @@ import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import java.nio.file.Path;
 
 public class ModConfig extends WrappedConfig {
-    public static final ModConfig INSTANCE = ModConfig.createToml(configPath(), "", ModClient.MOD_ID_NEO, ModConfig.class);
-
     @Comment("Whether to show descriptions in item tooltips.")
     public boolean itemDescriptions = true;
     @Comment("Whether to ignore keybind state when showing item descriptions.")
@@ -52,7 +49,7 @@ public class ModConfig extends WrappedConfig {
     public boolean developer_disableGenericTagDescriptions = false;
 
     @ExpectPlatform
-    static Path configPath() {
+    public static Path configPath() {
         throw new AssertionError();
     }
 }
