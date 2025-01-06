@@ -1,19 +1,11 @@
 package cc.cassian.item_descriptions.client.forge;
 
 import cc.cassian.item_descriptions.client.ModClient;
-import cc.cassian.item_descriptions.client.config.ModConfig;
-import cc.cassian.item_descriptions.client.config.forge.ModConfigFactory;
 import net.minecraft.text.Text;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.List;
 
@@ -28,8 +20,6 @@ public final class ItemDescriptionsForge {
         ModClient.init();
         //Add Tooltips
         addTooltips();
-        //Register config screen.
-        registerModsPage();
 
     }
 
@@ -46,10 +36,5 @@ public final class ItemDescriptionsForge {
             List<Text> tooltip = createTooltip(findItemLoreKey(event.getItemStack()), !tooltipFixInstalled());
             event.getToolTip().addAll(tooltip);
         }
-    }
-
-    //Integrate Cloth Config screen (if mod present) with Forge mod menu.
-    public static void registerModsPage() {
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ModConfigFactory::createScreen));
     }
 }

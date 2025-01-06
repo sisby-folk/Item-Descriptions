@@ -44,12 +44,6 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
-    // Cloth Config
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-    // Mod Menu
-    modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
     // Jade
     modImplementation "maven.modrinth:jade:${project.jade_version}+fabric"
     // WTHIT

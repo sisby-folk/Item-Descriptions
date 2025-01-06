@@ -19,9 +19,6 @@
     "client": [
       "cc.cassian.item_descriptions.client.fabric.ItemDescriptionsFabricClient"
     ],
-    "modmenu": [
-      "cc.cassian.item_descriptions.client.config.fabric.ModMenuIntegration"
-    ],
     "jade": [
       "cc.cassian.item_descriptions.client.jade.fabric.JadeIntegration"
     ]
@@ -30,10 +27,6 @@
     "fabricloader": ">=0.15.7",
     "minecraft": ">=1.20",
     "fabric-api": "*"
-  },
-  "recommends": {
-    "cloth-config": "*",
-    "modmenu": "*"
   },
   "suggests": {
     "tooltipfix": "*",

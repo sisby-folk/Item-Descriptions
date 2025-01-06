@@ -27,19 +27,12 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static cc.cassian.item_descriptions.client.ModClient.LOGGER;
 import static cc.cassian.item_descriptions.client.ModClient.MOD_ID;
 import static cc.cassian.item_descriptions.client.helpers.GenericKeys.*;
 
 public class ModHelpers {
     //Shorthand for config.
     public static ModConfig config = ModConfig.get();
-
-    //Check if Cloth Config is installed and its configuration can be used.
-    @ExpectPlatform
-    public static boolean clothConfigInstalled() {
-        throw new AssertionError();
-    }
 
     //Check if ToolTipFix is installed and its wrapper should be used.
     @ExpectPlatform

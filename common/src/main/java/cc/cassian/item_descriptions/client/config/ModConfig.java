@@ -1,71 +1,57 @@
 package cc.cassian.item_descriptions.client.config;
 
 import cc.cassian.item_descriptions.client.ModClient;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import folk.sisby.kaleido.api.WrappedConfig;
+import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ModConfig {
+public class ModConfig extends WrappedConfig {
+    public static final ModConfig INSTANCE = ModConfig.createToml(configPath(), "", ModClient.MOD_ID_NEO, ModConfig.class);
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
-
-    private static ModConfig INSTANCE = new ModConfig();
-    //General settings
+    @Comment("Whether to show descriptions in item tooltips.")
     public boolean itemDescriptions = true;
+    @Comment("Whether to ignore keybind state when showing item descriptions.")
     public boolean displayAlways = false;
-    //Style
-    public String style_color = "Gray";
-    public boolean style_italics = false;
-    public boolean style_bold = false;
-    public int style_length = 40;
-    //Keybinds
-    public boolean keybind_displayWhenControlIsHeld = true;
-    public boolean keybind_displayWhenShiftIsHeld = false;
-    public boolean keybind_displayWhenAltIsHeld = false;
-    public boolean keybind_invert = false;
-    //Block/Entity Descriptions
+    @Comment("Whether to show descriptions for blocks in WTHIT or Jade.")
     public boolean blockDescriptions = true;
+    @Comment("Whether to ignore keybind state when showing block descriptions.")
     public boolean displayBlockDescriptionsAlways = false;
+    @Comment("Whether to show descriptions for entities in WTHIT or Jade.")
     public boolean entityDescriptions = true;
+    @Comment("Whether to ignore keybind state when showing entity descriptions.")
     public boolean displayEntityDescriptionsAlways = false;
-    //Developer settings
+
+    @Comment("What color to use for description text, by formatting code or name.")
+    public String style_color = "Gray";
+    @Comment("Whether description text should be displayed in italics.")
+    public boolean style_italics = false;
+    @Comment("Whether description text should be displayed in bold.")
+    public boolean style_bold = false;
+    @Comment("What length to attempt to wrap tooltips at.")
+    @Comment("0 to disable")
+    public int style_length = 0;
+
+    @Comment("Whether to show descriptions when Ctrl is held.")
+    public boolean keybind_displayWhenControlIsHeld = true;
+    @Comment("Whether to show descriptions when Shift is held.")
+    public boolean keybind_displayWhenShiftIsHeld = false;
+    @Comment("Whether to show descriptions when Alt is held.")
+    public boolean keybind_displayWhenAltIsHeld = false;
+    @Comment("Whether keys should hide descriptions, instead of show them.")
+    public boolean keybind_invert = false;
+
+    @Comment("Whether to show descriptions even when no translation is available.")
     public boolean developer_showUntranslated = false;
+    @Comment("Whether to display descriptions purely as translation keys.")
     public boolean developer_dontTranslate = false;
+    @Comment("Whether to disable hardcoded ID contains matching for common item types.")
     public boolean developer_disableGenericStringDescriptions = true;
+    @Comment("Whether to disable using tags to provide generic item descriptions.")
     public boolean developer_disableGenericTagDescriptions = false;
 
-
-    public static void load() {
-        if (!Files.exists(configPath())) {
-            save();
-            return;
-        }
-
-        try (var input = Files.newInputStream(configPath())) {
-            INSTANCE = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), ModConfig.class);
-        } catch (IOException e) {
-            ModClient.LOGGER.warn("Unable to load config file!");
-        }
-    }
-
-    public static void save() {
-        try (var output = Files.newOutputStream(configPath()); var writer = new OutputStreamWriter(output, StandardCharsets.UTF_8)) {
-            GSON.toJson(INSTANCE, writer);
-        } catch (IOException e) {
-            ModClient.LOGGER.warn("Unable to save config file!");
-        }
-    }
-
     public static ModConfig get() {
-        if (INSTANCE == null) INSTANCE = new ModConfig();
         return INSTANCE;
     }
 
