@@ -50,21 +50,15 @@ public class ModHelpers {
         int length = colour.length();
         if (length == 1) {
             return TextColor.fromFormatting(Formatting.byCode(colour.charAt(0)));
-        }
-        else {
+        } else {
             String replacedColour = colour.toLowerCase().replace(" ", "_");
             return switch (replacedColour) {
                 case "black", "dark_blue", "dark_green", "dark_red", "dark_purple",
-                     "blue", "green", "aqua", "red", "yellow", "white" ->
-                        TextColor.fromFormatting(Formatting.byName(colour));
-                case "pink", "light_purple" ->
-                        TextColor.fromFormatting(Formatting.byName("light_purple"));
-                case "dark_gray", "dark_grey" ->
-                        TextColor.fromFormatting(Formatting.byName("dark_gray"));
-                case "cyan", "dark_aqua" ->
-                        TextColor.fromFormatting(Formatting.byName("dark_aqua"));
-                case "orange", "gold", "dark_yellow" ->
-                        TextColor.fromFormatting(Formatting.byName("gold"));
+                     "blue", "green", "aqua", "red", "yellow", "white" -> TextColor.fromFormatting(Formatting.byName(colour));
+                case "pink", "light_purple" -> TextColor.fromFormatting(Formatting.byName("light_purple"));
+                case "dark_gray", "dark_grey" -> TextColor.fromFormatting(Formatting.byName("dark_gray"));
+                case "cyan", "dark_aqua" -> TextColor.fromFormatting(Formatting.byName("dark_aqua"));
+                case "orange", "gold", "dark_yellow" -> TextColor.fromFormatting(Formatting.byName("gold"));
                 default -> TextColor.fromFormatting(Formatting.byName("gray"));
             };
         }
@@ -76,9 +70,8 @@ public class ModHelpers {
         int index;
         //Find the last space character in the substring, if not, default to the length of the substring.
         if (subKey.contains(" ")) {
-            index = subKey.lastIndexOf(" ")+1;
-        }
-        else index = maxLength;
+            index = subKey.lastIndexOf(" ") + 1;
+        } else index = maxLength;
         return index;
     }
 
@@ -100,7 +93,7 @@ public class ModHelpers {
         boolean invert = ModClient.CONFIG.keybind_invert;
         //If key is pressed, display the tooltip unless inverted.
         if (key) return !invert;
-        //If key is not pressed, don't display the tooltip unless inverted.
+            //If key is not pressed, don't display the tooltip unless inverted.
         else if (!key) return invert;
         else return false;
     }
@@ -112,8 +105,7 @@ public class ModHelpers {
         if (s != null) {
             if (s.contains("CUSTOM_MODEL_DATA", NbtElement.NUMBER_TYPE)) {
                 return getLoreKey(stack) + ".custommodeldata." + Objects.requireNonNull(s.get("CUSTOM_MODEL_DATA"));
-            }
-            else if (s.contains("SkullOwner", NbtElement.STRING_TYPE)) {
+            } else if (s.contains("SkullOwner", NbtElement.STRING_TYPE)) {
                 String profileKey = getProfile(stack);
                 if (hasTranslation(profileKey)) {
                     return profileKey;
@@ -159,16 +151,14 @@ public class ModHelpers {
     public static String getProfile(BlockEntity blockEntity, String loreKey) {
         String optionalProfileName;
         try {
-             optionalProfileName = Objects.requireNonNull(((SkullBlockEntity) blockEntity).getOwner()).getName();
-        }
-        catch (NullPointerException nullPointerException) {
+            optionalProfileName = Objects.requireNonNull(((SkullBlockEntity) blockEntity).getOwner()).getName();
+        } catch (NullPointerException nullPointerException) {
             return loreKey;
         }
         String profileKey = loreKey + ".profile." + optionalProfileName;
         if (hasTranslation(profileKey)) {
             return profileKey;
-        }
-        else return loreKey;
+        } else return loreKey;
     }
 
     //Check if block descriptions should be shown based off configuration.
@@ -184,6 +174,7 @@ public class ModHelpers {
         if (tooltipKeyPressed()) return true;
         return ModClient.CONFIG.displayAlways;
     }
+
     //Check if entity descriptions should be shown based off configuration.
     public static boolean showEntityDescriptions() {
         if (!ModClient.CONFIG.entityDescriptions) return false;
@@ -207,10 +198,9 @@ public class ModHelpers {
         if (!ModClient.CONFIG.developer_dontTranslate) {
             //Check if the tooltip translation key exists. If so, use the provided tooltip.
             if (hasTranslation(loreKey)) return loreKey;
-            //If the tooltip translation key does not exist, use one of the provided generic tooltips.
+                //If the tooltip translation key does not exist, use one of the provided generic tooltips.
             else return getGenericLoreKey(loreKey);
-        }
-        else return loreKey;
+        } else return loreKey;
     }
 
     //Check if a tag exists, or if a generic one should be used.
@@ -218,8 +208,7 @@ public class ModHelpers {
         @NotNull String key = getLoreTranslationKey(object);
         if (hasTranslation(key)) {
             return key;
-        }
-        else {
+        } else {
             return getGenericKey(object);
         }
     }
@@ -238,11 +227,9 @@ public class ModHelpers {
     public static boolean checkNamespacedTag(String namespace, Object object, String tag) {
         if (object instanceof ItemStack stack) {
             return stack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of(namespace, tag)));
-        }
-        else if (object instanceof BlockState state) {
+        } else if (object instanceof BlockState state) {
             return state.isIn(TagKey.of(RegistryKeys.BLOCK, Identifier.of(namespace, tag)));
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -252,9 +239,9 @@ public class ModHelpers {
         String loreKey;
         //Find the translation key for blocks.
         if (translationKey.contains("block.")) loreKey = translationKey.replaceFirst("block", "lore");
-        //Find the translation key for items.
+            //Find the translation key for items.
         else if ((translationKey.contains("item."))) loreKey = translationKey.replaceFirst("item", "lore");
-        //Find the translation key for entities.
+            //Find the translation key for entities.
         else if ((translationKey.contains("entity."))) {
             //Entity descriptions use a different format as to avoiding colliding with items of the same name.
             String oldKey = translationKey.replaceFirst("entity", "lore");
@@ -288,10 +275,9 @@ public class ModHelpers {
             String playerKey = "entity.minecraft.player." + entity.getName().getString();
             //Check if a custom player description exists.
             if (hasTranslation(playerKey)) return playerKey;
-            //If not, use the default one.
+                //If not, use the default one.
             else return "entity.minecraft.player";
-        }
-        else {
+        } else {
             return entity.getType().getTranslationKey();
         }
 
@@ -313,26 +299,24 @@ public class ModHelpers {
     public static List<Text> createTooltip(int subjectLength, String loreKey, boolean wrap) {
         //Setup list to store (potentially multi-line) tooltip.
         ArrayList<Text> lines = new ArrayList<>();
-        int maxLength = MathHelper.clamp(subjectLength , ModClient.CONFIG.style_min_length, ModClient.CONFIG.style_max_length);
+        int maxLength = MathHelper.clamp(subjectLength, ModClient.CONFIG.style_min_length, ModClient.CONFIG.style_max_length);
         //Check if the key exists.
         if (!loreKey.isEmpty()) {
             //Translate the lore key.
             String translatedKey = translate(loreKey);
             //Check if the translated key exists.
             if (hasTranslation(loreKey)) {
-                //Check if custom wrapping should be used.
                 if (wrap && (maxLength != 0)) {
-                    //Any tooltip longer than XX characters should be shortened.
                     while (MinecraftClient.getInstance().textRenderer.getWidth(Text.of(translatedKey)) >= maxLength) {
                         int lineLength = translatedKey.length();
-                        while (translatedKey.substring(0, lineLength).contains(" ") && MinecraftClient.getInstance().textRenderer.getWidth(Text.of(translatedKey.substring(0, lineLength))) >= maxLength) {
+                        while (translatedKey.substring(0, lineLength).contains(" ")
+                                && MinecraftClient.getInstance().textRenderer.getWidth(Text.of(translatedKey.substring(0, lineLength))) >= maxLength) {
                             lineLength = translatedKey.substring(0, lineLength).lastIndexOf(' ');
                         }
                         lines.add(Text.literal(translatedKey.substring(0, lineLength)).setStyle(getStyle()));
                         translatedKey = translatedKey.substring(lineLength + 1);
                     }
                 }
-                //Add the final tooltip.
                 lines.add(Text.literal(translatedKey).setStyle(getStyle()));
             }
         }
@@ -357,12 +341,12 @@ public class ModHelpers {
 
     // Automatically generate translation keys for config options.
     public static Text fieldName(Field field) {
-        return Text.translatable("config."+MOD_ID+".config." + field.getName());
+        return Text.translatable("config." + MOD_ID + ".config." + field.getName());
     }
-    
+
     // Automatically generate translation keys for config tooltips. Relies on custom tooltip wrapping.
     public static Text[] fieldTooltip(Field field) {
-        String tooltipKey = "config."+MOD_ID+".config." + field.getName() + ".tooltip";
+        String tooltipKey = "config." + MOD_ID + ".config." + field.getName() + ".tooltip";
         return createTooltip(100, tooltipKey, true).toArray(new Text[0]);
     }
 
