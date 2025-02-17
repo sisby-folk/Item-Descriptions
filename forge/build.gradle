@@ -32,6 +32,7 @@ dependencies {
 
     modImplementation "maven.modrinth:jade:11.9.4+forge"
     modCompileOnly "mcp.mobius.waila:wthit-api:forge-${project.wthit_version}"
+    modCompileOnly "mcp.mobius.waila:wthit:forge-${project.wthit_version}" // needed to measure lines
     // run against the full jar
     modRuntimeOnly "mcp.mobius.waila:wthit:forge-${project.wthit_version}"
     modRuntimeOnly "lol.bai:badpackets:forge-${project.badpackets_version}"

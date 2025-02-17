@@ -26,11 +26,12 @@ public class ModConfig extends WrappedConfig {
     public boolean style_italics = false;
     @Comment("Whether description text should be displayed in bold.")
     public boolean style_bold = false;
-    @Comment("What length to attempt to wrap tooltips at.")
-    @Comment("0 to disable")
-    public int style_length = 0;
+    @Comment("The minimum characters to wrap lore to.")
+    public int style_min_length = 20;
+    @Comment("The maximum characters to wrap lore to.")
+    public int style_max_length = 60;
 
-    @Comment("Whether to show descriptions when Ctrl is held.")
+    //Keybinds
     public boolean keybind_displayWhenControlIsHeld = true;
     @Comment("Whether to show descriptions when Shift is held.")
     public boolean keybind_displayWhenShiftIsHeld = false;

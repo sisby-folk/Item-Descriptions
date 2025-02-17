@@ -20,6 +20,7 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -308,10 +309,10 @@ public class ModHelpers {
     }
 
     // Create a custom, potentially multi-line tooltip.
-    public static List<Text> createTooltip(String loreKey, boolean wrap) {
+    public static List<Text> createTooltip(int subjectLength, String loreKey, boolean wrap) {
         //Setup list to store (potentially multi-line) tooltip.
         ArrayList<Text> lines = new ArrayList<>();
-        int maxLength = ModClient.CONFIG.style_length;
+        int maxLength = MathHelper.clamp(subjectLength / 5, ModClient.CONFIG.style_min_length, ModClient.CONFIG.style_max_length);
         //Check if the key exists.
         if (!loreKey.isEmpty()) {
             //Translate the lore key.
@@ -361,7 +362,7 @@ public class ModHelpers {
     // Automatically generate translation keys for config tooltips. Relies on custom tooltip wrapping.
     public static Text[] fieldTooltip(Field field) {
         String tooltipKey = "config."+MOD_ID+".config." + field.getName() + ".tooltip";
-        return createTooltip(tooltipKey, true).toArray(new Text[0]);
+        return createTooltip(100, tooltipKey, true).toArray(new Text[0]);
     }
 
     // Get the current value of a config field.

@@ -48,6 +48,7 @@ dependencies {
     modImplementation "maven.modrinth:jade:${project.jade_version}+fabric"
     // WTHIT
     modCompileOnly "mcp.mobius.waila:wthit-api:fabric-${project.wthit_version}"
+    modCompileOnly "mcp.mobius.waila:wthit:fabric-${project.wthit_version}" // need impl to measure other tooltip widths
     modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${project.wthit_version}"
     modRuntimeOnly "lol.bai:badpackets:fabric-${project.badpackets_version}"
     // Architectury Loom

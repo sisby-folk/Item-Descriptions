@@ -1,6 +1,7 @@
 package cc.cassian.item_descriptions.client.forge;
 
 import cc.cassian.item_descriptions.client.ModClient;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -33,7 +34,11 @@ public final class ItemDescriptionsForge {
         //Only show tooltip if key is pressed or "always on" is enabled.
         if (showItemDescriptions()) {
             //Create and add tooltip. Tooltip will be wrapped, either by ToolTipFix if installed, or by custom wrapper if not.
-            List<Text> tooltip = createTooltip(findItemLoreKey(event.getItemStack()), !tooltipFixInstalled());
+            int subjectLength = 0;
+            for (Text line : event.getToolTip()) {
+                subjectLength = Math.max(subjectLength, MinecraftClient.getInstance().textRenderer.getWidth(line));
+            }
+            List<Text> tooltip = createTooltip(subjectLength, findItemLoreKey(event.getItemStack()), !tooltipFixInstalled());
             event.getToolTip().addAll(tooltip);
         }
     }

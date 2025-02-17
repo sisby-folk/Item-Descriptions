@@ -3,6 +3,7 @@ package cc.cassian.item_descriptions.client.fabric;
 import cc.cassian.item_descriptions.client.ModClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -22,7 +23,11 @@ public final class ItemDescriptionsFabricClient implements ClientModInitializer 
             //Only show tooltip if key is pressed or "always on" is enabled.
             if (showItemDescriptions()) {
                 //Create and add tooltip. Tooltip will be wrapped, either by ToolTipFix if installed, or by custom wrapper if not.
-                List<Text> tooltip = createTooltip(findItemLoreKey(stack), !tooltipFixInstalled());
+                int subjectLength = 0;
+                for (Text line : lines) {
+                    subjectLength = Math.max(subjectLength, MinecraftClient.getInstance().textRenderer.getWidth(line));
+                }
+                List<Text> tooltip = createTooltip(subjectLength, findItemLoreKey(stack), !tooltipFixInstalled());
                 lines.addAll(tooltip);
             }
         });

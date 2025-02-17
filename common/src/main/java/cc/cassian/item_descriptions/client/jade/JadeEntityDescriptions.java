@@ -1,12 +1,15 @@
 package cc.cassian.item_descriptions.client.jade;
 
 import cc.cassian.item_descriptions.client.ModClient;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.ui.IElement;
+import snownee.jade.impl.ui.TextElement;
 
 import java.util.List;
 
@@ -20,7 +23,15 @@ public enum JadeEntityDescriptions implements IEntityComponentProvider {
         //Check if block descriptions are enabled in mod config.
         if (showEntityDescriptions()) {
             //Create and add tooltip.
-            List<Text> tooltip = createTooltip(findEntityLoreKey(entityAccessor.getEntity()), true);
+            int subjectLength = 0;
+            for (int i = 0; i < lines.size(); i++) {
+                for (IElement element : lines.get(i, IElement.Align.LEFT)) {
+                    if (element instanceof TextElement text) {
+                        subjectLength = Math.max(subjectLength, MinecraftClient.getInstance().textRenderer.getWidth(text.text));
+                    }
+                }
+            }
+            List<Text> tooltip = createTooltip(subjectLength, findEntityLoreKey(entityAccessor.getEntity()), true);
             for (Text text : tooltip) {
                 lines.add(text);
             }
