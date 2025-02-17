@@ -38,7 +38,7 @@ public class WTHITIntegration implements IWailaPlugin, IBlockComponentProvider, 
     }
 
     @ExpectPlatform
-    protected int getSubjectLength(ITooltip lines) {
+    public static int getSubjectLength(ITooltip lines) {
         throw new AssertionError();
     }
 

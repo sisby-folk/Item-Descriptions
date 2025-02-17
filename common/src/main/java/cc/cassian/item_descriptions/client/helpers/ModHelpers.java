@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.SkullBlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
@@ -312,7 +313,7 @@ public class ModHelpers {
     public static List<Text> createTooltip(int subjectLength, String loreKey, boolean wrap) {
         //Setup list to store (potentially multi-line) tooltip.
         ArrayList<Text> lines = new ArrayList<>();
-        int maxLength = MathHelper.clamp(subjectLength / 5, ModClient.CONFIG.style_min_length, ModClient.CONFIG.style_max_length);
+        int maxLength = MathHelper.clamp(subjectLength , ModClient.CONFIG.style_min_length, ModClient.CONFIG.style_max_length);
         //Check if the key exists.
         if (!loreKey.isEmpty()) {
             //Translate the lore key.
@@ -322,13 +323,13 @@ public class ModHelpers {
                 //Check if custom wrapping should be used.
                 if (wrap && (maxLength != 0)) {
                     //Any tooltip longer than XX characters should be shortened.
-                    while (translatedKey.length() >= maxLength) {
-                        //Find how much to shorten the tooltip by.
-                        int index = getIndex(translatedKey, maxLength);
-                        //Add a shortened tooltip.
-                        lines.add(Text.literal(translatedKey.substring(0, index)).setStyle(getStyle()));
-                        //Remove the shortened tooltip substring from the tooltip. Repeat.
-                        translatedKey = translatedKey.substring(index);
+                    while (MinecraftClient.getInstance().textRenderer.getWidth(Text.of(translatedKey)) >= maxLength) {
+                        int lineLength = translatedKey.length();
+                        while (translatedKey.substring(0, lineLength).contains(" ") && MinecraftClient.getInstance().textRenderer.getWidth(Text.of(translatedKey.substring(0, lineLength))) >= maxLength) {
+                            lineLength = translatedKey.substring(0, lineLength).lastIndexOf(' ');
+                        }
+                        lines.add(Text.literal(translatedKey.substring(0, lineLength)).setStyle(getStyle()));
+                        translatedKey = translatedKey.substring(lineLength + 1);
                     }
                 }
                 //Add the final tooltip.

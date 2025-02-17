@@ -26,10 +26,10 @@ public class ModConfig extends WrappedConfig {
     public boolean style_italics = false;
     @Comment("Whether description text should be displayed in bold.")
     public boolean style_bold = false;
-    @Comment("The minimum characters to wrap lore to.")
-    public int style_min_length = 20;
-    @Comment("The maximum characters to wrap lore to.")
-    public int style_max_length = 60;
+    @Comment("The minimum length to wrap lore to.")
+    public int style_min_length = 100;
+    @Comment("The maximum length to wrap lore to.")
+    public int style_max_length = 300;
 
     //Keybinds
     public boolean keybind_displayWhenControlIsHeld = true;
